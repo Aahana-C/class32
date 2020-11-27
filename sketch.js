@@ -7,11 +7,12 @@ var engine, world;
 var box1, pig1,pig3;
 var backgroundImg,platform;
 var bird, slingshot;
+var score =0;
 
 var gameState = "onSling";
 
 function preload() {
-    backgroundImg = loadImage("sprites/bg.png");
+    getBackgroundImage();
 }
 
 function setup(){
@@ -45,18 +46,29 @@ function setup(){
 }
 
 function draw(){
+    if(backgroundImg){
     background(backgroundImg);
+    }
     Engine.update(engine);
     //strokeWeight(4);
+
+  textSize(20);
+  text("Score"+score,1100,50); 
+
+
+
+
     box1.display();
     box2.display();
     ground.display();
     pig1.display();
+    pig1.score();
     log1.display();
 
     box3.display();
     box4.display();
     pig3.display();
+    pig3.score();
     log3.display();
 
     box5.display();
@@ -68,6 +80,26 @@ function draw(){
     //log6.display();
     slingshot.display();    
 }
+
+//js -
+async function getBackgroundImage(){
+    var response = await fetch("http://worldtimeapi.org/api/timezone/Europe/London");
+    var responseJSON = await response.json();
+
+    var datetime = responseJSON.datetime;
+    var hour = datetime.slice(11,13);
+    
+
+    if (hour>=6 && hour<=18){
+       backgroundImg = loadImage("sprites/bg.png");
+    }
+    else {
+    backgroundImg = loadImage("sprites/bg2.jpg");
+    }
+}
+
+
+
 
 function mouseDragged(){
     if (gameState!=="launched"){
